@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { Crown, X } from "lucide-react";
+import { Crown, Moon, Sun, X } from "lucide-react";
 import { sessionsApi } from "@/api/sessions";
 import { loadPersistedTabs, savePersistedTabs, TAB_STORAGE_KEY, type PersistedTabState } from "@/lib/tab-persistence";
 
@@ -28,11 +28,21 @@ interface TopBarProps {
 
 export default function TopBar({ tabs: tabsProp, onTabClick, onCloseTab, canCloseTabs, afterTabs, children }: TopBarProps) {
   const navigate = useNavigate();
+  const THEME_KEY = "hive.theme";
+  const [theme, setTheme] = useState<"light" | "dark">(() =>
+    document.documentElement.classList.contains("dark") ? "dark" : "light"
+  );
 
   // Fallback: read persisted tabs when no live tabs provided
   const [persisted, setPersisted] = useState<PersistedTabState | null>(() =>
     tabsProp ? null : loadPersistedTabs()
   );
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
 
   const tabs: TopBarTab[] = tabsProp ?? deriveTabs(persisted);
   const showClose = canCloseTabs ?? true;
@@ -87,25 +97,36 @@ export default function TopBar({ tabs: tabsProp, onTabClick, onCloseTab, canClos
   }, [onCloseTab]);
 
   return (
-    <div className="relative h-12 flex items-center justify-between px-5 border-b border-border/60 bg-card/50 backdrop-blur-sm flex-shrink-0">
-      <div className="flex items-center gap-3 min-w-0">
-        <button onClick={() => navigate("/")} className="flex items-center gap-2 hover:opacity-80 transition-opacity flex-shrink-0">
-          <Crown className="w-4 h-4 text-primary" />
-          <span className="text-sm font-semibold text-primary">Open Hive</span>
+    <div className="relative mx-3 mt-3 h-14 flex items-center justify-between px-4 rounded-2xl border border-primary/35 bg-card/90 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex-shrink-0">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+      <div className="absolute inset-y-0 left-0 w-1 rounded-l-2xl bg-primary" />
+
+      <div className="flex items-center gap-3 min-w-0 pl-2">
+        <button
+          onClick={() => navigate("/")}
+          className="group flex items-center gap-2 rounded-xl px-2 py-1 transition-colors hover:bg-primary/10 flex-shrink-0"
+        >
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15 border border-primary/30 text-primary">
+            <Crown className="w-4 h-4" />
+          </span>
+          <span className="flex flex-col items-start leading-none">
+            <span className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Hive Navbar</span>
+            <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">Open Hive</span>
+          </span>
         </button>
 
         {tabs.length > 0 && (
           <>
-            <span className="text-border text-xs flex-shrink-0">|</span>
-            <div className="flex items-center gap-0.5 min-w-0 overflow-x-auto scrollbar-hide">
+            <span className="h-6 w-px bg-border/70 flex-shrink-0" />
+            <div className="flex items-center gap-1 min-w-0 overflow-x-auto scrollbar-hide">
               {tabs.map((tab) => (
                 <button
                   key={tab.agentType}
                   onClick={() => handleTabClick(tab.agentType)}
-                  className={`group flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
+                  className={`group flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-colors whitespace-nowrap flex-shrink-0 border ${
                     tab.isActive
-                      ? "bg-primary/15 text-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      ? "bg-primary/15 text-foreground border-primary/30 shadow-[0_0_0_1px_hsl(var(--primary)/0.15)]"
+                      : "text-muted-foreground border-transparent hover:text-foreground hover:bg-muted/60 hover:border-border/60"
                   }`}
                 >
                   {tab.hasRunning && (
@@ -129,11 +150,21 @@ export default function TopBar({ tabs: tabsProp, onTabClick, onCloseTab, canClos
         )}
       </div>
 
-      {children && (
-        <div className="flex items-center gap-1 flex-shrink-0">
-          {children}
-        </div>
-      )}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {children && (
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {children}
+          </div>
+        )}
+        <button
+          type="button"
+          aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          onClick={() => setTheme((current) => (current === "dark" ? "light" : "dark"))}
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-primary/25 bg-primary/10 text-primary transition-colors hover:bg-primary/15 hover:border-primary/40"
+        >
+          {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+      </div>
     </div>
   );
 }

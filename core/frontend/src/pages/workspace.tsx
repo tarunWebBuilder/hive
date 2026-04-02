@@ -56,7 +56,7 @@ function TimerCountdown({ initialSeconds }: { initialSeconds: number }) {
     return () => clearInterval(id);
   }, []);
 
-  if (remaining <= 0) return <span className="text-amber-400/80">firing...</span>;
+  if (remaining <= 0) return <span className="text-muted-foreground">firing...</span>;
   return <span>{formatCountdown(remaining)}</span>;
 }
 
@@ -3185,9 +3185,9 @@ export default function Workspace() {
             {/* Connection error banner */}
             {activeAgentState?.error && !activeAgentState?.loading && dismissedBanner !== activeAgentState.error && (
               activeAgentState.error === "credentials_required" ? (
-                <div className="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-background border-b border-amber-500/30 flex items-center gap-2">
-                  <KeyRound className="w-4 h-4 text-amber-600" />
-                  <span className="text-xs text-amber-700">Missing credentials — configure them to continue</span>
+                <div className="absolute top-0 left-0 right-0 z-10 px-4 py-2 bg-background border-b border-destructive/20 flex items-center gap-2">
+                  <KeyRound className="w-4 h-4 text-destructive" />
+                  <span className="text-xs text-destructive">Missing credentials — configure them to continue</span>
                   <button
                     onClick={() => setCredentialsOpen(true)}
                     className="ml-auto text-xs font-medium text-primary hover:underline"
@@ -3196,7 +3196,7 @@ export default function Workspace() {
                   </button>
                   <button
                     onClick={() => setDismissedBanner(activeAgentState.error!)}
-                    className="p-0.5 rounded text-amber-600 hover:text-amber-800 hover:bg-amber-500/20 transition-colors"
+                    className="p-0.5 rounded text-destructive hover:text-destructive hover:bg-destructive/10 transition-colors"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -3261,11 +3261,11 @@ export default function Workspace() {
                           {resolvedSelectedNode.triggerType} trigger
                           <span className={`inline-block w-1.5 h-1.5 rounded-full ${
                             resolvedSelectedNode.status === "running" || resolvedSelectedNode.status === "complete"
-                              ? "bg-emerald-400" : "bg-muted-foreground/40"
+                              ? "bg-success" : "bg-muted-foreground/40"
                           }`} />
                           <span className={`text-[10px] ${
                             resolvedSelectedNode.status === "running" || resolvedSelectedNode.status === "complete"
-                              ? "text-emerald-400" : "text-muted-foreground/60"
+                              ? "text-success" : "text-muted-foreground/60"
                           }`}>
                             {resolvedSelectedNode.status === "running" || resolvedSelectedNode.status === "complete" ? "active" : "inactive"}
                           </span>
@@ -3417,10 +3417,10 @@ export default function Workspace() {
                             }}
                             className={`w-full text-xs px-3 py-2 rounded-lg border transition-colors ${
                               triggerIsActive
-                                ? "border-red-500/30 text-red-400 hover:bg-red-500/10"
+                                ? "border-destructive/30 text-destructive hover:bg-destructive/10"
                                 : taskMissing
                                   ? "border-border/30 text-muted-foreground/40 cursor-not-allowed"
-                                  : "border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10"
+                                  : "border-success/30 text-success hover:bg-success/10"
                             }`}
                           >
                             {triggerIsActive ? "Disable Trigger" : "Enable Trigger"}

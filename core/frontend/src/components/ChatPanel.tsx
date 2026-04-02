@@ -773,7 +773,7 @@ export default function ChatPanel({
               <button
                 type="button"
                 onClick={onCancel}
-                className="p-2 rounded-lg bg-amber-500/15 text-amber-400 border border-amber-500/40 hover:bg-amber-500/25 transition-colors"
+              className="p-2 rounded-lg bg-destructive/10 text-destructive border border-destructive/20 hover:bg-destructive/15 transition-colors"
               >
                 <Square className="w-4 h-4" />
               </button>

@@ -15,9 +15,9 @@ export const RunButton = memo(function RunButton({ runState, disabled, onRun, on
       onMouseLeave={() => setHovered(false)}
       className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all duration-200 ${
         showPause
-          ? "bg-amber-500/15 text-amber-400 border border-amber-500/40 hover:bg-amber-500/25 active:scale-95 cursor-pointer"
+          ? "bg-muted/80 text-foreground border border-border/80 hover:bg-muted active:scale-95 cursor-pointer"
           : runState === "running"
-          ? "bg-green-500/15 text-green-400 border border-green-500/30 cursor-pointer"
+          ? "bg-success/10 text-success border border-success/20 cursor-pointer"
           : runState === "deploying"
           ? "bg-primary/10 text-primary border border-primary/20 cursor-default"
           : disabled

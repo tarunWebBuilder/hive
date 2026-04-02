@@ -297,7 +297,7 @@ export default function CredentialsModal({
               error && rows.length === 0
                 ? "bg-destructive/5 border-destructive/20 text-destructive"
                 : allRequiredMet
-                  ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600"
+                  ? "bg-success/10 border-success/20 text-success"
                   : "bg-destructive/5 border-destructive/20 text-destructive"
             }`}>
               {error && rows.length === 0 ? (
@@ -358,16 +358,16 @@ export default function CredentialsModal({
                         {row.required && (
                           row.alternativeGroup ? (
                             <span className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                              row.connected
-                                ? "text-emerald-600/70 bg-emerald-500/10"
-                                : "text-amber-600/70 bg-amber-500/10"
+                            row.connected
+                                ? "text-success/80 bg-success/10"
+                                : "text-muted-foreground bg-muted/60"
                             }`}>
                               Either
                             </span>
                           ) : (
                             <span className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                               row.connected
-                                ? "text-emerald-600/70 bg-emerald-500/10"
+                                ? "text-success/80 bg-success/10"
                                 : "text-destructive/70 bg-destructive/10"
                             }`}>
                               Required
